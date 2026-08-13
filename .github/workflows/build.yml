@@ -1,8 +1,11 @@
 name: Build Android APK
+
 on:
   workflow_dispatch:
+
 permissions:
   contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,14 +34,27 @@ jobs:
         run: npm run build
       - name: Sync Capacitor
         run: npx cap sync android
-      - name: Build debug APK
+      - name: Decode keystore
         working-directory: android
+        run: echo "${{ secrets.BASE }}" | base64 -d > .ks
+      - name: Build APK
+        working-directory: android
+        env:
+          PSWD: ${{ secrets.PSWD }}
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file=$(pwd)/.ks \
+            -Pandroid.injected.signing.store.password="$PSWD" \
+            -Pandroid.injected.signing.key.alias=qlens \
+            -Pandroid.injected.signing.key.password="$PSWD"
+      - name: Delete keystore
+        if: always()
+        working-directory: android
+        run: rm -rf .ks
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          name: QLens
+          path: android/app/build/outputs/apk/release/app-release.apk
           retention-days: 1

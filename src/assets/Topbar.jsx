@@ -46,8 +46,8 @@ export default function Topbar() {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="text" size="small" onClick={() => setDiaOpen(false)}>Cancel</Button>
-        <Button variant="text" size="small" onClick={clearApp} color="error">Clear</Button>
+        <Button variant="text" onClick={() => setDiaOpen(false)}>Cancel</Button>
+        <Button variant="text" onClick={clearApp} color="error">Clear</Button>
       </DialogActions>
     </Dialog>
   </Toolbar>

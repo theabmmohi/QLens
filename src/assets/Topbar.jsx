@@ -1,10 +1,11 @@
-import { Toolbar, Stack, Tooltip, IconButton, Menu, Divider, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
+import { Toolbar, Stack, IconButton, Menu, Divider, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
 import { LuTrash2, LuSettings } from "react-icons/lu"
 import { IoMenu, IoClose } from "react-icons/io5"
 import { useNavigate } from "react-router-dom"
 import { useState, useContext } from "react"
 import { GoDotFill } from "react-icons/go"
 import Button from "@component/Button"
+import Hint from "@component/Hint"
 import Context from "@js/Context"
 
 export default function Topbar () {
@@ -20,11 +21,11 @@ export default function Topbar () {
   return <Toolbar sx={{ justifyContent: "space-between" }}>
     <img src="/iconR.png" style={{ height: 40, width: "auto" }}/>
     <Stack sx={{ flexDirection: "row"}}>
-      <Tooltip title="Menu" placement="left">
+      <Hint title="Menu">
         <IconButton onClick={(event) => menuOpen ? setAnchorEl(null) : setAnchorEl(event.currentTarget)}>
           {menuOpen?<IoClose/>:<IoMenu/>}
         </IconButton>
-      </Tooltip>
+      </Hint>
     </Stack>
     <Menu anchorEl={anchorEl} open={menuOpen} onClose={() => setAnchorEl(null)} slotProps={{ paper: { elevation: 0, sx: { border: "1px solid", borderColor: "divider", borderRadius: 0.5, minWidth: 200 } } }}>
       <Stack sx={{ my: -1 }}>

@@ -1,11 +1,23 @@
 import { ThemeProvider, CssBaseline, Stack, AppBar, Divider, Snackbar, Slide } from "@mui/material"
+import { useNavigate, useLocation } from "react-router-dom"
 import { BrowserRouter } from "react-router-dom"
 import { useState, useEffect } from "react"
+import { App as Cap } from "@capacitor/app"
 import Context from "@js/Context"
 
 import { ThemeL, ThemeD } from "@js/Theme"
 import Topbar from "@asset/Topbar"
 import Router from "@asset/Router"
+
+function BackButton () {
+  const navigate = useNavigate()
+  const location = useLocation()
+  useEffect(() => {
+    const listener = Cap.addListener("backButton", () => location.pathname === "/" ? Cap.exitApp() : navigate(-1))
+    return () => listener.remove()
+  }, [location])
+  return null
+}
 
 export default function App () {
   // ============================== Theme
@@ -70,6 +82,7 @@ export default function App () {
           </Stack>
         </Stack>
         <Snackbar key={currentSnack?.key} open={open} onClose={handleSnackClose} message={currentSnack?.message} autoHideDuration={currentSnack?.message ? Math.max(2500, currentSnack.message.length * 100) : 2500} slots={{ transition: Slide }} slotProps={{ transition: { onExited: handleSnackExited } }} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}/>
+        <BackButton/>
       </BrowserRouter>
     </ThemeProvider>
   </Context.Provider>

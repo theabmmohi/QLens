@@ -1,7 +1,7 @@
 import { Toolbar, Stack, IconButton, Menu, Divider, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material"
+import { useNavigate, useLocation } from "react-router-dom"
 import { LuTrash2, LuSettings } from "react-icons/lu"
 import { IoMenu, IoClose } from "react-icons/io5"
-import { useNavigate } from "react-router-dom"
 import { useState, useContext } from "react"
 import { GoDotFill } from "react-icons/go"
 import Button from "@component/Button"
@@ -14,6 +14,7 @@ export default function Topbar () {
   const [diaOpen, setDiaOpen] = useState(false)
   const menuOpen = Boolean(anchorEl)
   const navigate = useNavigate()
+  const location = useLocation()
   const clearApp = () => {
     localStorage.clear()
     window.location.href = "/"
@@ -30,7 +31,7 @@ export default function Topbar () {
     <Menu anchorEl={anchorEl} open={menuOpen} onClose={() => setAnchorEl(null)} slotProps={{ paper: { elevation: 0, sx: { border: "1px solid", borderColor: "divider", borderRadius: 0.5, minWidth: 200 } } }}>
       <Stack sx={{ my: -1 }}>
         <Stack>
-          <Button variant="text" size="small" startIcon={<LuSettings/>} sx={{ justifyContent: "flex-start", borderColor: "divider", borderRadius: 0.5, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, px: 1 }} onClick={() => { setAnchorEl(null); navigate("/settings") }}>Settings</Button>
+          <Button variant="text" size="small" startIcon={<LuSettings/>} sx={{ justifyContent: "flex-start", borderColor: "divider", borderRadius: 0.5, borderBottomRightRadius: 0, borderBottomLeftRadius: 0, px: 1 }} onClick={() => { setAnchorEl(null); if (location.pathname !== "/settings") navigate("/settings") }}>Settings</Button>
         </Stack>
         <Divider/>
         <Stack sx={{ p: 1, gap: 0.5 }}>

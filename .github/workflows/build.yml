@@ -2,10 +2,8 @@ name: Build Android APK
 
 on:
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -52,9 +50,26 @@ jobs:
         if: always()
         working-directory: android
         run: rm -rf .ks
-      - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+      - name: Get Github release options
+        id: options
+        run: |
+          v=$(grep -oP 'versionName\s+"\K[^"]+' android/app/build.gradle)
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "path=android/app/build/outputs/apk/release/app-release.apk" >> "$GITHUB_OUTPUT"
+      - name: Upload to Github release
+        uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.options.outputs.version }}
           name: QLens
-          path: android/app/build/outputs/apk/release/app-release.apk
-          retention-days: 1
+          body: "Release build"
+          files: ${{ steps.options.outputs.path }}
+      - name: Prune old releases (keep latest 5)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release list --limit 100 --json tagName,createdAt \
+            --jq 'sort_by(.createdAt) | reverse | .[5:] | .[].tagName' \
+          | while read -r old_tag; do
+              echo "Deleting release + tag: $old_tag"
+              gh release delete "$old_tag" --yes --cleanup-tag
+            done

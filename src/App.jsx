@@ -20,7 +20,27 @@ function BackButton () {
   return null
 }
 
+import { NodeJS } from "capacitor-nodejs"
 export default function App () {
+
+
+
+useEffect(() => {
+  let listenerHandle
+  NodeJS.whenReady().then(() => {
+    NodeJS.addListener("fromNode", (event) => {
+      toast(`from node: ${JSON.stringify(event.args)}`)
+    }).then((handle) => { listenerHandle = handle })
+    NodeJS.send({
+      eventName: "fromReact",
+      args: ["Hello from Capacitor!"]
+    })
+  })
+  return () => { listenerHandle?.remove() }
+}, [])
+
+
+
   const [theme, setTheme] = useState(() => localStorage.getItem("AppTheme") || "system")
   const [systemPrefersDark, setSystemPrefersDark] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches)
   useEffect(() => {

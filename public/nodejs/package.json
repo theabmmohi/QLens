@@ -1,0 +1,9 @@
+{
+  "name": "nodejs",
+  "type": "module",
+  "version": "0.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "bridge": "file:../../node_modules/capacitor-nodejs/assets/types/bridge.tgz"
+  }
+}

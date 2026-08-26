@@ -1,5 +1,10 @@
 {
   "appId": "com.theabmmohi.qlens",
   "appName": "QLens",
-  "webDir": "dist"
+  "webDir": "dist",
+  "plugins": {
+    "CapacitorNodeJS": {
+      "nodeDir": "nodejs"
+    }
+  }
 }

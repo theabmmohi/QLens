@@ -36,7 +36,7 @@ export default function Topbar () {
         <Divider/>
         <Stack sx={{ p: 1, gap: 0.5 }}>
           <Typography variant="caption">Theme</Typography>
-          {["system", "light", "dark"].map((option) => <Stack onClick={() => { setAnchorEl(null); applyTheme(option); toast(`App theme switched to ${option}.`) }} sx={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
+          {["system", "light", "dark"].map((option) => <Stack onClick={() => { setAnchorEl(null); applyTheme(option); toast.info(`App theme switched to ${option}.`) }} sx={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
             <GoDotFill style={{ opacity: theme === option ? 1 : 0, transition: "opacity 250ms" }}/>
             <Typography>{option.charAt(0).toUpperCase() + option.slice(1)}</Typography>
           </Stack>)}

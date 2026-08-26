@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { BrowserRouter } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { App as Cap } from "@capacitor/app"
-import { Toaster, toast as t } from "sonner"
+import { Toaster, toast } from "sonner"
 import Context from "@js/Context"
 
 import { ThemeL, ThemeD } from "@js/Theme"
@@ -21,7 +21,6 @@ function BackButton () {
 }
 
 export default function App () {
-  // ============================== Theme
   const [theme, setTheme] = useState(() => localStorage.getItem("AppTheme") || "system")
   const [systemPrefersDark, setSystemPrefersDark] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches)
   useEffect(() => {
@@ -39,37 +38,7 @@ export default function App () {
     localStorage.setItem("AppTheme", newTheme)
     setTheme(newTheme)
   }
-  // ============================== Toast
-  const [, setSnackQueue] = useState([])
-  const [currentSnack, setCurrentSnack] = useState(undefined)
-  const [open, setOpen] = useState(false)
-  const toast = (message) => {
-    const item = { message, key: Date.now() }
-    if (currentSnack) setSnackQueue((prev) => [...prev, item])
-    else {
-      setCurrentSnack(item)
-      setOpen(true)
-    }
-  }
-  const handleSnackExited = () => {
-    setSnackQueue((prev) => {
-      if (prev.length) {
-        setCurrentSnack(prev[0])
-        setOpen(true)
-        return prev.slice(1)
-      }
-      setCurrentSnack(undefined)
-      return prev
-    })
-  }
-  const handleSnackClose = () => setOpen(false)
-  // ============================== Contexts
-  const contexts = {
-    theme,
-    applyTheme,
-    toast: t
-  }
-  return <Context.Provider value={contexts}>
+  return <Context.Provider value={{ theme, applyTheme, toast }}>
     <ThemeProvider theme={isDark ? ThemeD : ThemeL}>
       <CssBaseline/>
       <BrowserRouter>
@@ -82,8 +51,7 @@ export default function App () {
             <Router/>
           </Stack>
         </Stack>
-        <Snackbar key={currentSnack?.key} open={open} onClose={handleSnackClose} message={currentSnack?.message} autoHideDuration={currentSnack?.message ? Math.max(2500, currentSnack.message.length * 100) : 2500} slots={{ transition: Slide }} slotProps={{ transition: { onExited: handleSnackExited } }} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}/>
-        <Toaster theme={theme} richColors position="top-center" swipeDirections={["left", "right", "top"]}/>
+        <Toaster theme={theme} richColors={!isDark} position="bottom-center" swipeDirections={["top", "bottom"]} toastOptions={{ duration: 5000 }}/>
         <BackButton/>
       </BrowserRouter>
     </ThemeProvider>

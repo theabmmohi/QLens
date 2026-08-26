@@ -19,3 +19,16 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Capacitor plugins rely on reflection to find @CapacitorPlugin / @PluginMethod
+# annotated classes and methods - keep them all intact.
+-keep @com.getcapacitor.annotation.CapacitorPlugin class * { *; }
+-keepclassmembers class * {
+    @com.getcapacitor.PluginMethod *;
+}
+-keep class com.getcapacitor.** { *; }
+
+# capacitor-nodejs bridges to the Node.js runtime via JNI/reflection -
+# keep its classes and members untouched.
+-keep class net.hampoelz.capacitor.nodejs.** { *; }
+-keepclassmembers class net.hampoelz.capacitor.nodejs.** { *; }

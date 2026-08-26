@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom"
 import { BrowserRouter } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { App as Cap } from "@capacitor/app"
+import { Toaster, toast as t } from "sonner"
 import Context from "@js/Context"
 
 import { ThemeL, ThemeD } from "@js/Theme"
@@ -66,7 +67,7 @@ export default function App () {
   const contexts = {
     theme,
     applyTheme,
-    toast
+    toast: t
   }
   return <Context.Provider value={contexts}>
     <ThemeProvider theme={isDark ? ThemeD : ThemeL}>
@@ -82,6 +83,7 @@ export default function App () {
           </Stack>
         </Stack>
         <Snackbar key={currentSnack?.key} open={open} onClose={handleSnackClose} message={currentSnack?.message} autoHideDuration={currentSnack?.message ? Math.max(2500, currentSnack.message.length * 100) : 2500} slots={{ transition: Slide }} slotProps={{ transition: { onExited: handleSnackExited } }} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}/>
+        <Toaster theme={theme} richColors position="top-center" swipeDirections={["left", "right", "top"]}/>
         <BackButton/>
       </BrowserRouter>
     </ThemeProvider>

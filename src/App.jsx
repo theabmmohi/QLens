@@ -71,7 +71,7 @@ useEffect(() => {
             <Router/>
           </Stack>
         </Stack>
-        <Toaster theme={theme} richColors={!isDark} position="bottom-center" swipeDirections={["top", "bottom"]} toastOptions={{ duration: 5000 }}/>
+        <Toaster theme={theme} richColors={!isDark} position="bottom-center" swipeDirections={["left", "right"]} toastOptions={{ duration: 5000 }}/>
         <BackButton/>
       </BrowserRouter>
     </ThemeProvider>
